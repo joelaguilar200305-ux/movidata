@@ -1,0 +1,7 @@
+data/
+exports/
+*.csv
+__pycache__/
+.venv/
+.env
+.vscode/
