@@ -10,9 +10,9 @@ Análisis de Big Data de movilidad urbana en el transporte público de Panamá (
 
 ## Instalación
 
-Clonar el repositorio y entrar a la carpeta (cambiar TU_USUARIO por el usuario del líder):
+Clonar el repositorio y entrar a la carpeta:
 
-    git clone https://github.com/TU_USUARIO/movidata.git
+    git clone https://github.com/joelaguilar200305-ux/movidata.git
     cd movidata
 
 Crear las carpetas que Git ignora:
