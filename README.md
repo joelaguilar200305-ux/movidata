@@ -45,7 +45,7 @@ Cargar los datos a MongoDB: se completa cuando esté listo el DataLoader.
 | Integrante | Rol |
 |---|---|
 | Yoel Aguilar | Líder técnico |
-| (Rodrigo Sanchez) | Arquitecto de datos |
-| (Pedro Garcia) | Desarrollador de ingesta |
-| (Angel Cardenas) | Desarrollador de análisis |
-| (Fernando Santamaria) | Documentación y BI |
+| Rodrigo Sanchez | Arquitecto de datos |
+| Pedro Garcia | Desarrollador de ingesta |
+| Angel Cardenas | Desarrollador de análisis |
+| Fernando Santamaria | Documentación y BI |
