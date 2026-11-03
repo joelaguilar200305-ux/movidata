@@ -59,8 +59,8 @@ para realizar la carga progresiva de viajes.
 
 - Base de datos: movidata
 - Coleccion: viajes
-- Registros cargados y verificados: 10000
-- Bloques utilizados: 1000 registros
+- Registros cargados y verificados: 20000
+- Carga automatizada en bloques de 1000 registros
 - Control de duplicados mediante trip_id
 - Conexion exitosa con MongoDB Atlas
 
