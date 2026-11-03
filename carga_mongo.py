@@ -17,6 +17,8 @@ URI = os.getenv("MONGODB_URI")
 ARCHIVO = BASE / "data" / "viajes_movidata.csv"
 
 TAMANO_BLOQUE = 1000
+# Control de carga progresiva de MoviData
+# Los registros se procesan en bloques de 1000
 
 
 def main():
