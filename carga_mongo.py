@@ -18,13 +18,19 @@ ARCHIVO = BASE / "data" / "viajes_movidata.csv"
 
 TAMANO_BLOQUE = 1000
 
+
 def main():
     parser = argparse.ArgumentParser()
     parser.add_argument("--inicio", type=int, default=0)
+    parser.add_argument("--cantidad", type=int, default=1000)
     args = parser.parse_args()
 
     if args.inicio < 0:
         print("ERROR: El inicio no puede ser negativo")
+        return
+
+    if args.cantidad < 1 or args.cantidad > 10000:
+        print("ERROR: cantidad debe estar entre 1 y 10000")
         return
 
     if not URI:
@@ -42,19 +48,20 @@ def main():
             URI,
             serverSelectionTimeoutMS=5000
         )
-
         cliente.admin.command("ping")
 
-        db = cliente["movidata"]
-        coleccion = db["viajes"]
+        coleccion = cliente["movidata"]["viajes"]
 
         print("Conexion exitosa con MongoDB Atlas")
+        print("Documentos iniciales:",
+              coleccion.count_documents({}))
 
-        total_antes = coleccion.count_documents({})
-        print("Documentos existentes:", total_antes)
-
-        # Indice unico para evitar duplicados
+        # Evitar duplicados
         coleccion.create_index("trip_id", unique=True)
+
+        procesados = 0
+        insertados = 0
+        existentes = 0
 
         with open(
             ARCHIVO,
@@ -67,41 +74,54 @@ def main():
             if "trip_id" not in (lector.fieldnames or []):
                 raise ValueError("Falta la columna trip_id")
 
-            # Saltar los registros anteriores
-            registros = list(
-                islice(lector, args.inicio, args.inicio + TAMANO_BLOQUE)
+            filas = islice(
+                lector,
+                args.inicio,
+                args.inicio + args.cantidad
             )
 
-        if not registros:
-            print("No hay registros en este rango")
-            return
+            while True:
+                bloque = list(islice(filas, TAMANO_BLOQUE))
 
-        operaciones = []
+                if not bloque:
+                    break
 
-        for fila in registros:
-            identificador = fila["trip_id"]
+                operaciones = []
 
-            if not identificador:
-                raise ValueError("trip_id vacio")
+                for fila in bloque:
+                    identificador = fila["trip_id"]
 
-            operaciones.append(
-                UpdateOne(
-                    {"trip_id": identificador},
-                    {"$setOnInsert": fila},
-                    upsert=True
+                    if not identificador:
+                        raise ValueError("trip_id vacio")
+
+                    operaciones.append(
+                        UpdateOne(
+                            {"trip_id": identificador},
+                            {"$setOnInsert": fila},
+                            upsert=True
+                        )
+                    )
+
+                resultado = coleccion.bulk_write(
+                    operaciones,
+                    ordered=False
                 )
-            )
 
-        resultado = coleccion.bulk_write(
-            operaciones,
-            ordered=False
-        )
+                procesados += len(bloque)
+                insertados += resultado.upserted_count
+                existentes += resultado.matched_count
+
+                print(
+                    "Procesados:", procesados,
+                    "| Nuevos:", insertados,
+                    "| Existentes:", existentes
+                )
 
         print("\nCARGA FINALIZADA")
-        print("Inicio del bloque:", args.inicio)
-        print("Registros procesados:", len(registros))
-        print("Nuevos insertados:", resultado.upserted_count)
-        print("Ya existentes:", resultado.matched_count)
+        print("Inicio:", args.inicio)
+        print("Registros procesados:", procesados)
+        print("Nuevos insertados:", insertados)
+        print("Ya existentes:", existentes)
         print(
             "Total en MongoDB:",
             coleccion.count_documents({})
