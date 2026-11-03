@@ -114,7 +114,7 @@ La carga se realiza utilizando el archivo carga_mongo.py.
 
 - Base de datos: movidata
 - Colección: viajes
-- Registros cargados y verificados: 500000
+- Registros cargados y verificados: 1000000
 - Bloques internos: 1000 registros
 - Máximo por ejecución: 10000 registros
 - Control de duplicados mediante trip_id
