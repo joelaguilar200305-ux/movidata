@@ -59,7 +59,7 @@ para realizar la carga progresiva de viajes.
 
 - Base de datos: movidata
 - Coleccion: viajes
-- Registros cargados: 5000
+- Registros cargados y verificados: 10000
 - Bloques utilizados: 1000 registros
 - Control de duplicados mediante trip_id
 - Conexion exitosa con MongoDB Atlas
@@ -73,6 +73,11 @@ Desde la terminal de VS Code:
     python carga_mongo.py --inicio 2000
     python carga_mongo.py --inicio 3000
     python carga_mongo.py --inicio 4000
+    python carga_mongo.py --inicio 5000
+    python carga_mongo.py --inicio 6000
+    python carga_mongo.py --inicio 7000
+    python carga_mongo.py --inicio 8000
+    python carga_mongo.py --inicio 9000
 
 ### Proxima etapa
 
