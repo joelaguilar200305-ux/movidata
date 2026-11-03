@@ -42,10 +42,39 @@ Cargar los datos a MongoDB: se completa cuando esté listo el DataLoader.
 
 ## Integrantes y roles
 
-| Integrante | Rol |
-|---|---|
-| Yoel Aguilar | Líder técnico |
-| (Rodrigo Sanchez) | Arquitecto de datos |
-| (Pedro Garcia) | Desarrollador de ingesta |
-| (Angel Cardenas) | Desarrollador de análisis |
-| (Fernando Santamaria) | Documentación y BI |
+| Integrante            | Rol                       |
+| --------------------- | ------------------------- |
+| Yoel Aguilar          | Líder técnico             |
+| (Rodrigo Sanchez)     | Arquitecto de datos       |
+| (Pedro Garcia)        | Desarrollador de ingesta  |
+| (Angel Cardenas)      | Desarrollador de análisis |
+| (Fernando Santamaria) | Documentación y BI        |
+
+## Avance de arquitectura de datos - MongoDB Atlas
+
+Se configuro la conexion de Python con MongoDB Atlas
+para realizar la carga progresiva de viajes.
+
+### Resultados obtenidos
+
+- Base de datos: movidata
+- Coleccion: viajes
+- Registros cargados: 5000
+- Bloques utilizados: 1000 registros
+- Control de duplicados mediante trip_id
+- Conexion exitosa con MongoDB Atlas
+
+### Ejecucion de la carga
+
+Desde la terminal de VS Code:
+
+    python carga_mongo.py --inicio 0
+    python carga_mongo.py --inicio 1000
+    python carga_mongo.py --inicio 2000
+    python carga_mongo.py --inicio 3000
+    python carga_mongo.py --inicio 4000
+
+### Proxima etapa
+
+Automatizar la carga progresiva de registros
+y supervisar el almacenamiento de MongoDB Atlas.
