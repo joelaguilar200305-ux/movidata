@@ -1,4 +1,5 @@
 
+
 from repositories.mongo_viajes_repository import MongoViajesRepository
 
 
@@ -75,11 +76,19 @@ def main():
         pipeline_horas = [
             {
                 "$group": {
-                    "_id": "$hour",
-                    "total": {"$sum": 1}
+                    "_id": {
+                        "$toInt": "$hour"
+                    },
+                    "total": {
+                        "$sum": 1
+                    }
                 }
             },
-            {"$sort": {"_id": 1}}
+            {
+                "$sort": {
+                    "_id": 1
+                }
+            }
         ]
 
         resultados = repositorio.agregar(
