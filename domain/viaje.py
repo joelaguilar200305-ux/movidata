@@ -93,7 +93,7 @@ class Viaje:
 
     @property
     def weather(self) -> str:
-      return self._weather
+        return self._weather
     
     @classmethod
     def desde_documento(cls, documento: dict) -> "Viaje":
