@@ -17,7 +17,6 @@ def main():
             print(
                 viaje.trip_id,
                 viaje.transport_mode,
-                viaje.district
             )
 
         print("\n2. Contar viajes de Metrobus")

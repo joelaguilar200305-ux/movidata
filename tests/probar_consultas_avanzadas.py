@@ -22,7 +22,6 @@ def main():
         for viaje in viajes:
             print(
                 viaje.trip_id,
-                viaje.district,
                 viaje.transport_mode
             )
 
