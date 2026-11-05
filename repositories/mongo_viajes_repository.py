@@ -37,6 +37,7 @@ class MongoViajesRepository(IReadableRepository):
 
         self.coleccion = self.cliente["movidata"]["viajes"]
 
+    # 1. BUSCAR VIAJE POR ID
     def buscar_por_id(self, trip_id: str) -> Optional[Viaje]:
         documento = self.coleccion.find_one(
             {"trip_id": trip_id},
@@ -48,6 +49,7 @@ class MongoViajesRepository(IReadableRepository):
 
         return Viaje.desde_documento(documento)
 
+    # 2. BUSCAR VIAJES UTILIZANDO FILTROS
     def buscar_por_filtro(
         self,
         filtros: dict[str, Any],
@@ -67,6 +69,7 @@ class MongoViajesRepository(IReadableRepository):
             for documento in documentos
         ]
 
+    # 3. CONTAR DOCUMENTOS
     def contar_documentos(
         self,
         filtros: Optional[dict[str, Any]] = None
@@ -77,6 +80,7 @@ class MongoViajesRepository(IReadableRepository):
             maxTimeMS=15000
         )
 
+    # 4. EJECUTAR AGREGACIONES
     def agregar(
         self,
         pipeline: list[dict[str, Any]]
@@ -104,5 +108,49 @@ class MongoViajesRepository(IReadableRepository):
 
         return list(cursor)
 
+    # 5. BUSCAR VIAJES CON PROYECCION DE CAMPOS
+    # NUEVA FUNCION DE OPTIMIZACION
+    def buscar_con_proyeccion(
+        self,
+        filtros: dict[str, Any],
+        campos: list[str],
+        limite: int = 100
+    ) -> list[dict[str, Any]]:
+
+        if not 1 <= limite <= 1000:
+            raise ValueError(
+                "El limite debe estar entre 1 y 1000"
+            )
+
+        if not campos:
+            raise ValueError(
+                "Debes indicar al menos un campo"
+            )
+
+        if any(
+            not isinstance(campo, str)
+            or not campo
+            or campo.startswith("$")
+            for campo in campos
+        ):
+            raise ValueError(
+                "Lista de campos invalida"
+            )
+
+        proyeccion = {
+            campo: 1
+            for campo in campos
+        }
+
+        proyeccion["_id"] = 0
+
+        cursor = self.coleccion.find(
+            filtros,
+            proyeccion
+        ).limit(limite).max_time_ms(15000)
+
+        return list(cursor)
+
+    # 6. CERRAR CONEXION MONGODB
     def cerrar(self):
         self.cliente.close()
