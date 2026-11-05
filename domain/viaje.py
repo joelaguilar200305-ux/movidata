@@ -93,5 +93,28 @@ class Viaje:
 
     @property
     def weather(self) -> str:
-        return self._weather
+      return self._weather
+    
+    @classmethod
+    def desde_documento(cls, documento: dict) -> "Viaje":
+        """Crea un Viaje a partir de un documento de MongoDB."""
+        fecha = documento["boarding_datetime"]
+        if not isinstance(fecha, datetime):
+            fecha = datetime.fromisoformat(str(fecha))
+        return cls(
+            trip_id=str(documento["trip_id"]),
+            card_id=str(documento["card_id"]),
+            transport_mode=str(documento["transport_mode"]),
+            route_line=str(documento["route_line"]),
+            origin=str(documento["origin"]),
+            destination=str(documento["destination"]),
+            boarding_datetime=fecha,
+            day_of_week=str(documento["day_of_week"]),
+            hour=int(documento["hour"]),
+            distance_km=float(documento["distance_km"]),
+            duration_min=float(documento["duration_min"]),
+            fare=float(documento["fare"]),
+            payment_method=str(documento["payment_method"]),
+            weather=str(documento["weather"]),
+        )
     
