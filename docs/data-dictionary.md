@@ -36,8 +36,11 @@ Con la semilla fija `SEED = 2025`, cualquier computadora genera los mismos datos
 
 | Dato | Valor |
 |---|---|
-| Registros | 2,000,000 |
+| Registros en el csv| 2,000,000 |
 | Tarjetas únicas | 120,000 |
 | Recaudación total simulada | 504,910.51 PAB |
 | Duración promedio | 23.7 min |
 | Metrobus / Metro | 1,100,281 / 899,719 |
+
+ - **Documentos cargados:** 1,000,000 de viajes, según lo indicado por el profesor. El archivo `viajes_movidata.csv` se genera con 2,000,000 de filas y se carga un subconjunto (también es lo que permite el plan gratuito de MongoDB Atlas, 512 MB).
+ 
