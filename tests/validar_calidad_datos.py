@@ -39,31 +39,31 @@ def main():
 
         print("trip_id unico:", indice_unico)
 
+
         print("\n2. VALIDACION DE TIPOS")
 
-        campos = [
+        campos_texto = [
             "trip_id",
             "boarding_datetime",
             "transport_mode",
             "district",
-            "route_line",
-            "hour"
+            "route_line"
         ]
 
-        for campo in campos:
+        for campo in campos_texto:
             incorrectos = coleccion.count_documents({
-                campo: {
-                    "$not": {
-                        "$type": "string"
-                    }
-                }
+                campo: {"$not": {"$type": "string"}}
             })
 
-            print(
-                campo,
-                "tipos diferentes de string:",
-                incorrectos
-            )
+            print(campo, "tipos diferentes de string:", incorrectos)
+
+        incorrectos_hora = coleccion.count_documents({
+            "hour": {"$not": {"$type": "string"}}
+        })
+
+        print("hour tipos diferentes de numero:", incorrectos_hora)
+
+
 
         print("\n3. VALIDACION DE HORAS")
 
