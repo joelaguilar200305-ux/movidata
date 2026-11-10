@@ -1,47 +1,28 @@
 
-import os
-from pathlib import Path
 from typing import Any, Optional
 
-from dotenv import load_dotenv
-from pymongo import MongoClient
-from pymongo.errors import PyMongoError
-
+from config.conexion_mongo import MongoConnection
 from domain.viaje import Viaje
-from repositories.i_readable_repository import IReadableRepository
+from repositories.i_viaje_repository import IViajeRepository
 
 
-class MongoViajesRepository(IReadableRepository):
+class MongoViajeRepository(IViajeRepository):
 
+    # 1. CONEXION CENTRALIZADA A MONGODB ATLAS
     def __init__(self):
-        base = Path(__file__).resolve().parent.parent
-        load_dotenv(base / ".env")
+        self.conexion = MongoConnection.get_instance()
+        self.coleccion = self.conexion.coleccion
 
-        uri = os.getenv("MONGODB_URI")
+    # 2. BUSCAR VIAJE POR ID
+    def buscar_por_id(
+        self,
+        trip_id: str
+    ) -> Optional[Viaje]:
 
-        if not uri:
-            raise ValueError("Falta MONGODB_URI en .env")
-
-        self.cliente = MongoClient(
-            uri,
-            serverSelectionTimeoutMS=10000,
-            socketTimeoutMS=30000,
-            retryWrites=False
-        )
-
-        try:
-            self.cliente.admin.command("ping")
-        except PyMongoError:
-            self.cliente.close()
-            raise
-
-        self.coleccion = self.cliente["movidata"]["viajes"]
-
-    # 1. BUSCAR VIAJE POR ID
-    def buscar_por_id(self, trip_id: str) -> Optional[Viaje]:
         documento = self.coleccion.find_one(
             {"trip_id": trip_id},
-            {"_id": 0}
+            {"_id": 0},
+            max_time_ms=15000
         )
 
         if documento is None:
@@ -49,7 +30,7 @@ class MongoViajesRepository(IReadableRepository):
 
         return Viaje.desde_documento(documento)
 
-    # 2. BUSCAR VIAJES UTILIZANDO FILTROS
+    # 3. BUSCAR VIAJES UTILIZANDO FILTROS
     def buscar_por_filtro(
         self,
         filtros: dict[str, Any],
@@ -57,7 +38,9 @@ class MongoViajesRepository(IReadableRepository):
     ) -> list[Viaje]:
 
         if not 1 <= limite <= 1000:
-            raise ValueError("El limite debe estar entre 1 y 1000")
+            raise ValueError(
+                "El limite debe estar entre 1 y 1000"
+            )
 
         documentos = self.coleccion.find(
             filtros,
@@ -69,7 +52,7 @@ class MongoViajesRepository(IReadableRepository):
             for documento in documentos
         ]
 
-    # 3. CONTAR DOCUMENTOS
+    # 4. CONTAR DOCUMENTOS
     def contar_documentos(
         self,
         filtros: Optional[dict[str, Any]] = None
@@ -80,14 +63,16 @@ class MongoViajesRepository(IReadableRepository):
             maxTimeMS=15000
         )
 
-    # 4. EJECUTAR AGREGACIONES
+    # 5. EJECUTAR AGREGACIONES
     def agregar(
         self,
         pipeline: list[dict[str, Any]]
     ) -> list[dict[str, Any]]:
 
         if not pipeline:
-            raise ValueError("El pipeline no puede estar vacio")
+            raise ValueError(
+                "El pipeline no puede estar vacio"
+            )
 
         etapas_prohibidas = {"$out", "$merge"}
 
@@ -108,8 +93,7 @@ class MongoViajesRepository(IReadableRepository):
 
         return list(cursor)
 
-    # 5. BUSCAR VIAJES CON PROYECCION DE CAMPOS
-    # NUEVA FUNCION DE OPTIMIZACION
+    # 6. BUSCAR VIAJES CON PROYECCION DE CAMPOS
     def buscar_con_proyeccion(
         self,
         filtros: dict[str, Any],
@@ -151,6 +135,6 @@ class MongoViajesRepository(IReadableRepository):
 
         return list(cursor)
 
-    # 6. CERRAR CONEXION MONGODB
+    # 7. CERRAR CONEXION MONGODB
     def cerrar(self):
-        self.cliente.close()
+        self.conexion.cerrar()

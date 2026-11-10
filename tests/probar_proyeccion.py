@@ -1,12 +1,12 @@
 
-from repositories.mongo_viajes_repository import MongoViajesRepository
+from repositories.mongo_viaje_repository import 	MongoViajeRepository
 
 
 def main():
     repositorio = None
 
     try:
-        repositorio = MongoViajesRepository()
+        repositorio = 	MongoViajeRepository()
 
         print("=== PRUEBA DE PROYECCION MOVIDATA ===")
 

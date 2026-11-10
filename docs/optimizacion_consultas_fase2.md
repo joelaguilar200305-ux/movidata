@@ -23,8 +23,8 @@ a MongoDB de la lógica de aplicación.
 Componentes:
 
 - domain/viaje.py
-- repositories/i_readable_repository.py
-- repositories/mongo_viajes_repository.py
+- repositories/i_viaje_repository.py
+- repositories/.py
 
 ### 4. Optimización mediante proyección
 
