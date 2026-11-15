@@ -54,7 +54,7 @@ class IViajeRepository(ABC):
     @abstractmethod
     def guardar_lote(
         self,
-        registros: list[dict[str, Any]]
+        registros: list[dict[str, Any] | Viaje]
     ) -> dict[str, int]:
         pass
 
@@ -64,5 +64,17 @@ class IViajeRepository(ABC):
         self,
         limite: int = 100,
         despues_de: Optional[str] = None
+    ) -> list[Viaje]:
+        pass
+
+    # 8. HU-08: FILTRAR VIAJES POR MODO, RUTA, DIA Y HORA
+    @abstractmethod
+    def filtrar_viajes(
+        self,
+        modo: Optional[str] = None,
+        ruta: Optional[str] = None,
+        fecha: Optional[str] = None,
+        hora: Optional[int] = None,
+        limite: int = 100
     ) -> list[Viaje]:
         pass
