@@ -7,6 +7,7 @@ from domain.viaje import Viaje
 
 class IViajeRepository(ABC):
 
+    # 1. BUSCAR VIAJE POR ID
     @abstractmethod
     def buscar_por_id(
         self,
@@ -14,6 +15,7 @@ class IViajeRepository(ABC):
     ) -> Optional[Viaje]:
         pass
 
+    # 2. BUSCAR VIAJES POR FILTROS
     @abstractmethod
     def buscar_por_filtro(
         self,
@@ -22,6 +24,7 @@ class IViajeRepository(ABC):
     ) -> list[Viaje]:
         pass
 
+    # 3. CONTAR DOCUMENTOS
     @abstractmethod
     def contar_documentos(
         self,
@@ -29,6 +32,7 @@ class IViajeRepository(ABC):
     ) -> int:
         pass
 
+    # 4. EJECUTAR AGREGACIONES
     @abstractmethod
     def agregar(
         self,
@@ -36,6 +40,7 @@ class IViajeRepository(ABC):
     ) -> list[dict[str, Any]]:
         pass
 
+    # 5. BUSCAR CON PROYECCION
     @abstractmethod
     def buscar_con_proyeccion(
         self,
@@ -45,36 +50,31 @@ class IViajeRepository(ABC):
     ) -> list[dict[str, Any]]:
         pass
 
-from abc import ABC, abstractmethod
-from typing import Any, Optional
-
-from domain.viaje import Viaje
-
-
-class IViajeRepository(ABC):
-
+    # 6. HU-07: INSERTAR VIAJES POR LOTES
     @abstractmethod
-    def buscar_por_id(self, trip_id: str) -> Optional[Viaje]:
+    def guardar_lote(
+        self,
+        registros: list[dict[str, Any] | Viaje]
+    ) -> dict[str, int]:
         pass
 
+    # 7. HU-07: CONSULTAR VIAJES POR PAGINAS
     @abstractmethod
-    def buscar_por_filtro(
+    def obtener_pagina(
         self,
-        filtros: dict[str, Any],
-        limite: int = 100
+        limite: int = 100,
+        despues_de: Optional[str] = None
     ) -> list[Viaje]:
         pass
 
+    # 8. HU-08: FILTRAR VIAJES POR MODO, RUTA, DIA Y HORA
     @abstractmethod
-    def contar_documentos(
+    def filtrar_viajes(
         self,
-        filtros: Optional[dict[str, Any]] = None
-    ) -> int:
-        pass
-
-    @abstractmethod
-    def agregar(
-        self,
-        pipeline: list[dict[str, Any]]
-    ) -> list[dict[str, Any]]:
+        modo: Optional[str] = None,
+        ruta: Optional[str] = None,
+        fecha: Optional[str] = None,
+        hora: Optional[int] = None,
+        limite: int = 100
+    ) -> list[Viaje]:
         pass
