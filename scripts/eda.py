@@ -25,7 +25,7 @@ COLUMNAS_TEXTO = [
     "user_type", "district", "transport_mode", "route_line", "origin",
     "destination", "day_of_week", "payment_method", "weather",
 ]
-
+FILAS_ANALIZADAS = 1_000_000  # mismo subconjunto cargado en MongoDB Atlas
 
 def a_markdown(tabla: pd.DataFrame) -> str:
     """Convierte un DataFrame a tabla Markdown sin depender de otras librerías."""
@@ -73,7 +73,7 @@ def guardar_grafico_tarifa(datos: pd.DataFrame) -> None:
 def main() -> None:
     DOCS.mkdir(exist_ok=True)
     tipos = {columna: "category" for columna in COLUMNAS_TEXTO}
-    datos = pd.read_csv(CSV, dtype=tipos, parse_dates=["boarding_datetime"])
+    datos = pd.read_csv(CSV, nrows=FILAS_ANALIZADAS, dtype=tipos, parse_dates=["boarding_datetime"])
 
     resumen = pd.DataFrame({
         "dato": ["Registros", "Columnas", "Valores vacíos", "trip_id repetidos",
