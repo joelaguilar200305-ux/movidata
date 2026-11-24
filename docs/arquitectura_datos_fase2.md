@@ -21,14 +21,15 @@ para consultar y analizar viajes de movilidad urbana.
 Componentes principales:
 
 - domain/viaje.py
-- repositories/i_readable_repository.py
-- repositories/mongo_viajes_repository.py
+- repositories/i_viaje_repository.py
+- repositories/.py
 
 El modelo Viaje representa los datos del dominio.
 
-IReadableRepository define la interfaz de lectura.
+IViajeRepository define la interfaz de lectura.
 
-MongoViajesRepository implementa las consultas
+    MongoViajeRepository implementa las consultas
+
 contra MongoDB Atlas.
 
 ### 4. Consultas implementadas
