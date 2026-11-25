@@ -2,3 +2,4 @@ numpy
 pandas
 pymongo>=4,<5
 python-dotenv
+matplotlib  3.11.2
