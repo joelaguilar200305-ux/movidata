@@ -1,12 +1,15 @@
 from analysis.i_analysis_strategy import IAnalysisStrategy
+from analysis.routes_analysis import RoutesAnalysis
 from domain.exceptions import AnalysisError
 
 
 class StrategyFactory:
     """Crea estrategias de análisis según su nombre (Factory Method)."""
 
-    # Registro: nombre del tipo -> clase de la estrategia (HU-09 y HU-10 se registran aquí)
-    _registry: dict[str, type[IAnalysisStrategy]] = {}
+    # Registro: nombre del tipo -> clase de la estrategia (HU-09 se registra aquí también)
+    _registry: dict[str, type[IAnalysisStrategy]] = {
+        "routes": RoutesAnalysis,
+    }
 
     @classmethod
     def create(cls, kind: str) -> IAnalysisStrategy:
