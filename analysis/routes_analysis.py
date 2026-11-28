@@ -9,7 +9,7 @@ from utils.logging_config import get_logger
 logger = get_logger(__name__)
 
 
-class RoutesAnalysis(IAnalysisStrategy):
+class RoutesAnalysisStrategy(IAnalysisStrategy):
     """Estrategia HU-10: rutas y orígenes con más viajes."""
 
     def __init__(self, top_n: int = 10) -> None:
