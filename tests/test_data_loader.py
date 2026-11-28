@@ -9,7 +9,7 @@ BASE = Path(__file__).resolve().parent.parent
 sys.path.insert(0, str(BASE))
 
 from utils.data_loader import DataLoader
-from exceptions.data_load_error import DataLoadError
+from domain.exceptions import DataLoadError
 
 
 class TestDataLoader(unittest.TestCase):

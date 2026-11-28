@@ -1,6 +1,8 @@
 import pandas as pd
+from domain.exceptions import DataLoadError
+from utils.logging_config import get_logger
 
-from exceptions.data_load_error import DataLoadError
+logger = get_logger(__name__)
 
 
 class DataLoader:
@@ -102,8 +104,11 @@ class DataLoader:
                 "Se encontraron trip_id duplicados después de la limpieza."
             )
 
-        print(f"Registros iniciales: {initial_records:,}")
-        print(f"Registros cargados: {loaded_records:,}")
-        print(f"Registros descartados: {discarded_records:,}")
+        logger.info(
+            "Records: initial=%s loaded=%s discarded=%s",
+            f"{initial_records:,}",
+            f"{loaded_records:,}",
+            f"{discarded_records:,}",
+        )
 
         return data
